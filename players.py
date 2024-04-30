@@ -45,7 +45,7 @@ class MinimaxPlayer(Player):
     Notes:
         - Can use board.has_legal_moves_remaing(self, symbol) to see if any nodes are remaining.
         - Can use board.count_score(self, symbol) to get the score of a specific symbol on the board.
-            - Could use count score of X and count score of O to get a utility function
+            - Could use count score of 'X' and count score of 'O' to get a utility function
         - can use clone_of_board(self) to make moves, and pass new states down the tree.
         - Can use python math.inf to represent infinity.
         - The board represents the state of the game.
