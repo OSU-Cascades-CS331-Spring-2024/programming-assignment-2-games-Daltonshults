@@ -1,3 +1,4 @@
+from math import inf 
 '''
     Defines Player class, and subclasses Human and Minimax Player.
 '''
@@ -37,10 +38,17 @@ class MinimaxPlayer(Player):
             self.oppSym = 'O'
         else:
             self.oppSym = 'X'
+
+
+    '''
+    Notes:
+        - Can use board.has_legal_moves_remaing(self, symbol) to see if any nodes are remaining.
+        - Can use board.count_score(self, symbol) to get the score of a specific symbol on the board.
+        - can use clone_of_board(self) to make moves, and pass new states down the tree.
+        - Can use python math.inf to represent infinity.
+    '''
+    def get_move(self, board):
+        return self.minimax(board, 4, self.symbol)
        
         
-
-
-
-
 
