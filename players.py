@@ -53,22 +53,21 @@ class MinimaxPlayer(Player):
         return (state[0], state[1])
     
     def simple_utility(self, board):
-
         return board.count_score(self.oppSym) - board.count_score(self.symbol)
     
-    def get_child_nodes(self, symbol, board):
+    def successors(self, symbol, board):
         legal_moves = board.get_legal_moves(symbol)
 
-        children = []
+        successors = []
 
         if len(legal_moves) == 0:
-            return children
+            return successors
         
         else:
             for action in legal_moves:
-                children.append(StateNode(state=board, parent=None, action=action, cost=None))
+                successors.append(StateNode(state=board, action=action))
 
-        return children
+        return successors
     
 
     def minimax(self, board, depth, symbol, alpha=-inf, beta=inf):
@@ -86,7 +85,7 @@ class MinimaxPlayer(Player):
             value = - inf
             
             # for each child of node do:
-            for child in self.get_child_nodes(symbol, board):
+            for child in self.successors(symbol, board):
                 
                 # Value = max(value, minimax(child, depth - 1, self.symbol))
                 new_board = board.clone_of_board()
@@ -102,7 +101,6 @@ class MinimaxPlayer(Player):
             
 
             # return value
-            result = value, action_taken
             return value, action_taken
 
         # If Minimizing Player then
@@ -112,7 +110,7 @@ class MinimaxPlayer(Player):
             value = inf
 
             # for each child of node do:
-            for child in self.get_child_nodes(symbol, board):
+            for child in self.successors(symbol, board):
 
                 # Value = min(value, minimax(child, depth - 1, self.oppSym))
                 new_board = board.clone_of_board()
@@ -127,7 +125,6 @@ class MinimaxPlayer(Player):
                     if beta <= alpha:
                         break
 
-            result = value, action_taken
             return value, action_taken
         
         
