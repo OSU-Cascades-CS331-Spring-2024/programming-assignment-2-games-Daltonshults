@@ -39,8 +39,6 @@ class MinimaxPlayer(Player):
             self.oppSym = 'O'
         else:
             self.oppSym = 'X'
-
-        self.memo = {}
     '''
     Notes:
         - Can use board.has_legal_moves_remaing(self, symbol) to see if any nodes are remaining.
@@ -73,17 +71,12 @@ class MinimaxPlayer(Player):
         return children
     
 
-    def minimax(self, board, depth, symbol):
+    def minimax(self, board, depth, symbol, alpha=-inf, beta=inf):
         action_taken = None
-        board_hash = str(board.grid)
 
-        if (board_hash, depth, symbol) in self.memo:
-            return self.memo[(board_hash, symbol)]
-        
         # If depth os 0 or node is terminal, return utility
         if depth == 0 or not board.has_legal_moves_remaining(symbol):
             result = self.simple_utility(board)
-            self.memo[(board_hash, symbol)] = result, action_taken
             return result, action_taken
         
         # If Maximizing Player then
@@ -98,15 +91,18 @@ class MinimaxPlayer(Player):
                 # Value = max(value, minimax(child, depth - 1, self.symbol))
                 new_board = board.clone_of_board()
                 new_board.play_move(child.action[0], child.action[1], self.oppSym)
-                new_value, _ = self.minimax(new_board, depth - 1, self.symbol)
+                new_value, _ = self.minimax(new_board, depth - 1, self.symbol, alpha=alpha, beta=beta)
                 value = max(value, new_value)
+
                 if value == new_value:
                     action_taken = child.action
+                    alpha = max(beta, value)
+                    if beta <= alpha:
+                        break
             
 
             # return value
             result = value, action_taken
-            self.memo[(board_hash, symbol)] = result
             return value, action_taken
 
         # If Minimizing Player then
@@ -121,15 +117,17 @@ class MinimaxPlayer(Player):
                 # Value = min(value, minimax(child, depth - 1, self.oppSym))
                 new_board = board.clone_of_board()
                 new_board.play_move(child.action[0], child.action[1], self.symbol)
-                new_value, _ = self.minimax(new_board, depth - 1, self.oppSym)
+                new_value, _ = self.minimax(new_board, depth - 1, self.oppSym, alpha=alpha, beta=beta)
                 value = min(value, new_value)
+
 
                 if value == new_value:
                     action_taken = child.action
+                    beta = min(beta, value)
+                    if beta <= alpha:
+                        break
 
             result = value, action_taken
-            self.memo[(board_hash, symbol)] = result
-            # return value  
             return value, action_taken
         
         
