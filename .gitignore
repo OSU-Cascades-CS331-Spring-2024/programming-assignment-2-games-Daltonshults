@@ -2,3 +2,5 @@
 __pycache__/
 .gitignore
 pseudocode.txt
+log*.txt
+forking_players_lol.py
