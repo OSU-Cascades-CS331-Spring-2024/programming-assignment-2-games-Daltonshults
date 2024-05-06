@@ -4,3 +4,5 @@ __pycache__/
 pseudocode.txt
 log*.txt
 forking_players_lol.py
+logs/
+*_by_*
