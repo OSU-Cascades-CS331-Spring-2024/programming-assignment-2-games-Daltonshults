@@ -18,4 +18,4 @@ class StateNode:
 
 
     def __str__(self):
-        return f"State: {self.state},\nParent: {self.parent},\nAction: {self.action},\n Cost: {self.cost}"
+        return f"State: {self.state},\nAction: {self.action}"
