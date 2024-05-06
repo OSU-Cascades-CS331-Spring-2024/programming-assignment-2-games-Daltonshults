@@ -79,7 +79,6 @@ class MinimaxPlayer(Player):
             # Value = max(value, minimax(child, depth - 1, self.symbol))
             new_board = board.clone_of_board()
             new_board.play_move(child.action[0], child.action[1], self.symbol)
-            # new_value, _ = self.minimax(new_board, depth - 1, self.oppSym, alpha=alpha, beta=beta)
             new_value, _ = self.minimax(new_board, depth - 1, False)
 
             value = max(value, new_value)
