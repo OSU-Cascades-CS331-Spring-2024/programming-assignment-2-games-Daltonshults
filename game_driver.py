@@ -4,6 +4,7 @@
 import sys
 from players import *
 from othello_board import OthelloBoard
+import time
 
 
 class GameDriver:
@@ -46,6 +47,7 @@ class GameDriver:
         current = self.p1
         opponent = self.p2
         self.board.display()
+        move_times = []
 
         cant_move_counter, toggle = 0, 0
 
@@ -53,7 +55,15 @@ class GameDriver:
         while True:
             if self.board.has_legal_moves_remaining(current.symbol):
                 cant_move_counter = 0
-                self.process_move(current, opponent)
+                
+                if (current == self.p2):
+                    start = time.time()
+                    self.process_move(current, opponent)
+                    end = time.time()
+                    move_times.append(end-start)
+                else:
+                    self.process_move(current, opponent)        
+
                 self.board.display()
             else:
                 print("Can't move")
@@ -77,6 +87,8 @@ class GameDriver:
             print("Player 1 Wins!")
         else:
             print("Player 2 Wins!")
+
+        print("Average move time: ", sum(move_times)/len(move_times))
 
 
 if __name__ == "__main__":
