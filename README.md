@@ -10,3 +10,15 @@ How to play a game:
 1. Run `python3 game_driver.py [player_type] [player_type]`.
 2. Choose `human`, or `minimax` as the player types.
 3. Follow the prompts to choose where to place stones.
+
+<h1 align="center">Analysis</h1>
+
+1. Simulate four games between yourself and the minimax player on a 4x4 board, with the depth parameter set to 5, 3, 2, and 1 respectively.
+    * What were the results of each game?
+    * Did the minimax player's moves change when the depth was limited to smaller and smaller values?
+    * What was the average time per move for each of the games? Commen on why there is or is not a difference.
+
+2. Simulate two games between yourself and the minimax player on an 8x8 board, with the depth parameter set to 5 and 2.
+    * What were the results of each game?
+    * Did the minimax player's moves change when the depth changed?
+    * What was the average time for each of the games? Commend on why there is or is not a difference.
