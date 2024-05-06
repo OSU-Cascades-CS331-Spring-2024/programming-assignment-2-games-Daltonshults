@@ -84,10 +84,7 @@ class MinimaxPlayer(Player):
 
             if value == new_value:
                 action_taken = child.action
-                # alpha = max(beta, value)
-                # if beta <= alpha:
-                #     break
-        
+
         # return value
         return value, action_taken
     
