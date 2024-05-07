@@ -53,7 +53,7 @@ class MinimaxPlayer(Player):
         return (state[0], state[1])
     
     def simple_utility(self, board):
-        return board.count_score(self.oppSym) - board.count_score(self.symbol)
+        return board.count_score(self.symbol) - board.count_score(self.oppSym)
     
     def successors(self, symbol, board):
         legal_moves = board.get_legal_moves(symbol)
@@ -69,60 +69,68 @@ class MinimaxPlayer(Player):
 
         return successors
     
-    def maxi(self, symbol, board, depth):    
+    def maxi(self, board, depth, alpha, beta):    
         # Set value to negative infinity
-        value = - inf
+        max_value = - inf
         
         # for each child of node do:
-        for child in self.successors(symbol, board):
+        for child in self.successors(self.symbol, board):
             
             # Value = max(value, minimax(child, depth - 1, self.symbol))
-            new_board = board.clone_of_board()
-            new_board.play_move(child.action[0], child.action[1], self.oppSym)
-            new_value, _ = self.minimax(new_board, depth - 1, self.symbol)
-            value = max(value, new_value)
+            child.board = board.clone_of_board()
+            child.board.play_move(child.action[0], child.action[1], self.symbol)
+            new_value, _ = self.minimax(child.board, depth - 1, False, alpha=alpha, beta=beta)
 
-            if value == new_value:
+            #max_value = max(max_value, new_value)
+            alpha = max(alpha, new_value)
+            if max_value < new_value:
                 action_taken = child.action
+                max_value = new_value
 
+            if beta <= alpha:
+                break
+        
         # return value
-        return value, action_taken
+        return max_value, action_taken
     
-    def mini(self, symbol, board, depth):    
+    def mini(self, board, depth, alpha, beta):    
         # Set value to positive infinity
-        value = inf
+        min_value = inf
 
         # for each child of node do:
-        for child in self.successors(symbol, board):
+        for child in self.successors(self.oppSym, board):
 
             # Value = min(value, minimax(child, depth - 1, self.oppSym))
-            new_board = board.clone_of_board()
-            new_board.play_move(child.action[0], child.action[1], self.symbol)
-            new_value, _ = self.minimax(new_board, depth - 1, self.oppSym)
-            value = min(value, new_value)
+            child.board = board.clone_of_board()
+            child.board.play_move(child.action[0], child.action[1], self.oppSym)
+            new_value, _ = self.minimax(child.board, depth - 1, True, alpha=alpha, beta=beta)
 
-
-            if value == new_value:
+            # new_value, _ = self.minimax(new_board, depth - 1, self.symbol, alpha=alpha, beta=beta)
+            beta = min(beta, new_value)
+            if min_value > new_value:
                 action_taken = child.action
+                min_value = new_value
 
-
-        return value, action_taken
+            if beta <= alpha:
+                break
+            
+        return min_value, action_taken
     
-    def minimax(self, board, depth, symbol):
+    def minimax(self, board, depth, maximizing, alpha=-inf, beta=inf):
         action_taken = None
 
         # If depth os 0 or node is terminal, return utility
-        if depth == 0 or not board.has_legal_moves_remaining(symbol):
+        if depth == 0 or not board.has_legal_moves_remaining(self.symbol if maximizing else self.oppSym):
             result = self.simple_utility(board)
             return result, action_taken
         
         # If Maximizing Player then
-        if symbol != self.symbol:
-            return self.maxi(symbol, board, depth)
+        if maximizing:
+            return self.maxi(board=board, depth=depth, alpha=alpha, beta=beta)
 
         # If Minimizing Player then
-        if symbol == self.symbol:
-            return self.mini(symbol, board, depth)
+        else:
+            return self.mini( board=board, depth=depth, alpha=alpha, beta=beta)
         
         
 
