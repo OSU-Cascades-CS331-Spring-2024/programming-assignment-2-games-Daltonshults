@@ -83,7 +83,6 @@ class MinimaxPlayer(Player):
 
             #max_value = max(max_value, new_value)
             alpha = max(alpha, new_value)
-
             if max_value < new_value:
                 action_taken = child.action
                 max_value = new_value
@@ -107,10 +106,7 @@ class MinimaxPlayer(Player):
             new_value, _ = self.minimax(child.board, depth - 1, True, alpha=alpha, beta=beta)
 
             # new_value, _ = self.minimax(new_board, depth - 1, self.symbol, alpha=alpha, beta=beta)
-            #min_value = min(min_value, new_value)
             beta = min(beta, new_value)
-
-
             if min_value > new_value:
                 action_taken = child.action
                 min_value = new_value
