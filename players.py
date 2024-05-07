@@ -69,46 +69,56 @@ class MinimaxPlayer(Player):
 
         return successors
     
-    def maxi(self, board, depth):    
+    def maxi(self, board, depth, alpha, beta):    
         # Set value to negative infinity
-        value = - inf
+        max_value = - inf
         
         # for each child of node do:
         for child in self.successors(self.symbol, board):
             
             # Value = max(value, minimax(child, depth - 1, self.symbol))
-            new_board = board.clone_of_board()
-            new_board.play_move(child.action[0], child.action[1], self.symbol)
-            new_value, _ = self.minimax(new_board, depth - 1, False)
+            child.board = board.clone_of_board()
+            child.board.play_move(child.action[0], child.action[1], self.symbol)
+            new_value, _ = self.minimax(child.board, depth - 1, False, alpha=alpha, beta=beta)
 
-            value = max(value, new_value)
+            #max_value = max(max_value, new_value)
+            alpha = max(alpha, new_value)
 
-            if value == new_value:
+            if max_value < new_value:
                 action_taken = child.action
+                max_value = new_value
+
+            if beta <= alpha:
+                break
         
         # return value
-        return value, action_taken
+        return max_value, action_taken
     
-    def mini(self, board, depth):    
+    def mini(self, board, depth, alpha, beta):    
         # Set value to positive infinity
-        value = inf
+        min_value = inf
 
         # for each child of node do:
         for child in self.successors(self.oppSym, board):
 
             # Value = min(value, minimax(child, depth - 1, self.oppSym))
-            new_board = board.clone_of_board()
-            new_board.play_move(child.action[0], child.action[1], self.oppSym)
-            new_value, _ = self.minimax(new_board, depth - 1, True)
+            child.board = board.clone_of_board()
+            child.board.play_move(child.action[0], child.action[1], self.oppSym)
+            new_value, _ = self.minimax(child.board, depth - 1, True, alpha=alpha, beta=beta)
 
             # new_value, _ = self.minimax(new_board, depth - 1, self.symbol, alpha=alpha, beta=beta)
-            value = min(value, new_value)
+            #min_value = min(min_value, new_value)
+            beta = min(beta, new_value)
 
 
-            if value == new_value:
+            if min_value > new_value:
                 action_taken = child.action
+                min_value = new_value
 
-        return value, action_taken
+            if beta <= alpha:
+                break
+            
+        return min_value, action_taken
     
     def minimax(self, board, depth, maximizing, alpha=-inf, beta=inf):
         action_taken = None
@@ -120,11 +130,11 @@ class MinimaxPlayer(Player):
         
         # If Maximizing Player then
         if maximizing:
-            return self.maxi(board, depth)
+            return self.maxi(board=board, depth=depth, alpha=alpha, beta=beta)
 
         # If Minimizing Player then
         else:
-            return self.mini( board, depth)
+            return self.mini( board=board, depth=depth, alpha=alpha, beta=beta)
         
         
 
