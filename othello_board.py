@@ -121,8 +121,8 @@ class OthelloBoard(Board):
 
     def get_legal_moves(self, symbol):
         legal_moves = []
-        for row in range(self.cols):
-            for col in range(self.rows):
+        for col in range(self.cols):
+            for row in range(self.rows):
                 if self.is_cell_empty(col, row) and self.is_legal_move(col, row, symbol):
                     legal_moves.append((col, row))
         
